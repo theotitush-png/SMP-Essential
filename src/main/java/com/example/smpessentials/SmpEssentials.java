@@ -1,11 +1,9 @@
 package com.example.smpessentials;
 
+import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
-import org.bukkit.boss.BarColor;
-import org.bukkit.boss.BarStyle;
-import org.bukkit.boss.BossBar;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -34,15 +32,21 @@ public final class SmpEssentials extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
-        if (discordBar != null) discordBar.removeAll();
+        if (discordBar != null) {
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                player.hideBossBar(discordBar);
+            }
+        }
     }
 
     private void createBar() {
         Component title = Component.text(GLYPH).font(Key.key("smp", "default"));
-        discordBar = Bukkit.createBossBar(title, BarColor.WHITE, BarStyle.SOLID);
-        // An empty bar keeps the custom banner prominent; vanilla still draws its thin bossbar track.
-        discordBar.setProgress(0.0);
-        discordBar.setVisible(getConfig().getBoolean("bossbar.enabled", true));
+        discordBar = BossBar.bossBar(
+                title,
+                0.0f,
+                BossBar.Color.WHITE,
+                BossBar.Overlay.PROGRESS
+        );
     }
 
     private void showTo(Player player) {
@@ -54,8 +58,9 @@ public final class SmpEssentials extends JavaPlugin implements Listener {
                 else player.setResourcePack(url, sha1);
             }
         }
-        if (!hiddenPlayers.contains(player.getUniqueId()) && getConfig().getBoolean("bossbar.enabled", true)) {
-            discordBar.addPlayer(player);
+        if (!hiddenPlayers.contains(player.getUniqueId())
+                && getConfig().getBoolean("bossbar.enabled", true)) {
+            player.showBossBar(discordBar);
         }
     }
 
@@ -78,11 +83,11 @@ public final class SmpEssentials extends JavaPlugin implements Listener {
             }
             UUID id = player.getUniqueId();
             if (hiddenPlayers.remove(id)) {
-                if (getConfig().getBoolean("bossbar.enabled", true)) discordBar.addPlayer(player);
+                if (getConfig().getBoolean("bossbar.enabled", true)) player.showBossBar(discordBar);
                 player.sendMessage("§aDiscord banner enabled.");
             } else {
                 hiddenPlayers.add(id);
-                discordBar.removePlayer(player);
+                player.hideBossBar(discordBar);
                 player.sendMessage("§eDiscord banner hidden.");
             }
             return true;
@@ -93,10 +98,12 @@ public final class SmpEssentials extends JavaPlugin implements Listener {
                 return true;
             }
             reloadConfig();
-            discordBar.removeAll();
             createBar();
             for (Player player : Bukkit.getOnlinePlayers()) {
-                if (!hiddenPlayers.contains(player.getUniqueId())) discordBar.addPlayer(player);
+                if (!hiddenPlayers.contains(player.getUniqueId())
+                        && getConfig().getBoolean("bossbar.enabled", true)) {
+                    player.showBossBar(discordBar);
+                }
             }
             sender.sendMessage("§aSMP Essentials reloaded.");
             return true;
