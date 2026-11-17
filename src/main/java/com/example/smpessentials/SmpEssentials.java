@@ -27,7 +27,7 @@ public final class SmpEssentials extends JavaPlugin implements Listener {
         createBar();
         Bukkit.getPluginManager().registerEvents(this, this);
         for (Player player : Bukkit.getOnlinePlayers()) showTo(player);
-        getLogger().info("SMP Essentials enabled.");
+        getLogger().info("SMP Essentials enabled. Players should enable the SMP Essentials pack in their client resource-pack settings.");
     }
 
     @Override
@@ -50,31 +50,10 @@ public final class SmpEssentials extends JavaPlugin implements Listener {
     }
 
     private void showTo(Player player) {
-        // Show the bar independently of pack configuration. A missing URL must
-        // never prevent the bossbar from being displayed.
         if (!hiddenPlayers.contains(player.getUniqueId())
                 && getConfig().getBoolean("bossbar.enabled", true)) {
             player.showBossBar(discordBar);
         }
-
-        if (!getConfig().getBoolean("resource-pack.auto-send", true)) return;
-
-        String url = getConfig().getString("resource-pack.url", "").trim();
-        String sha1 = getConfig().getString("resource-pack.sha1", "").trim();
-        if (!url.startsWith("https://") || !sha1.matches("(?i)[0-9a-f]{40}")) {
-            getLogger().warning("Resource pack prompt skipped: configure a direct HTTPS resource-pack.url and its 40-character SHA-1 in config.yml.");
-            player.sendMessage(Component.text(
-                    "§eThe Discord banner pack is not configured yet. The bossbar is visible, but its custom artwork needs the server resource pack."
-            ));
-            return;
-        }
-
-        player.setResourcePack(
-                url,
-                sha1.toLowerCase(),
-                true,
-                Component.text("This server requires the SMP Essentials pack for its custom Discord banner.")
-        );
     }
 
     @EventHandler
