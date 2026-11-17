@@ -36,3 +36,20 @@ jobs:
           path: build/libs/*.jar
           if-no-files-found: error
           retention-days: 30
+
+      - name: Package resource pack
+        run: |
+          cd resource-pack
+          zip -r ../SMP-Essentials-Resource-Pack.zip .
+          cd ..
+          sha1sum SMP-Essentials-Resource-Pack.zip | awk '{print $1}' > SMP-Essentials-Resource-Pack.sha1
+
+      - name: Upload resource pack ZIP and SHA-1
+        uses: actions/upload-artifact@v4
+        with:
+          name: SMP-Essentials-Resource-Pack
+          path: |
+            SMP-Essentials-Resource-Pack.zip
+            SMP-Essentials-Resource-Pack.sha1
+          if-no-files-found: error
+          retention-days: 30
