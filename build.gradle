@@ -20,6 +20,21 @@ dependencies {
     compileOnly 'io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT'
 }
 
+// Build the pack once and include the exact ZIP in the distributable plugin JAR.
+// Minecraft still downloads it from the HTTPS URL configured by the server owner.
+def packagedResourcePack = tasks.register('packageResourcePack', Zip) {
+    from('resource-pack')
+    archiveFileName = 'SMP-Essentials-Resource-Pack.zip'
+    destinationDirectory = layout.buildDirectory.dir('generated/resource-pack')
+}
+
+tasks.named('jar') {
+    dependsOn packagedResourcePack
+    from(packagedResourcePack.flatMap { it.archiveFile }) {
+        into('')
+    }
+}
+
 processResources {
     filteringCharset = 'UTF-8'
 }
