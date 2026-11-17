@@ -5,7 +5,7 @@
       "file": "smp:font/discord_banner.png",
       "ascent": 30,
       "height": 38,
-      "chars": ["\\uE001"]
+      "chars": ["\uE001"]
     }
   ]
 }
