@@ -3,6 +3,8 @@ name: Build SMP Essentials
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -28,6 +30,11 @@ jobs:
 
       - name: Build plugin
         run: gradle --no-daemon clean build
+
+      - name: Verify resource pack is embedded in plugin JAR
+        run: |
+          jar tf build/libs/*.jar | grep -Fx 'SMP-Essentials-Resource-Pack.zip'
+          unzip -l build/libs/*.jar SMP-Essentials-Resource-Pack.zip
 
       - name: Upload plugin JAR
         uses: actions/upload-artifact@v4
