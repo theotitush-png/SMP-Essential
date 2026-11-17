@@ -50,13 +50,16 @@ public final class SmpEssentials extends JavaPlugin implements Listener {
     }
 
     private void showTo(Player player) {
-        if (getConfig().getBoolean("resource-pack.auto-send", false)) {
+        if (getConfig().getBoolean("resource-pack.auto-send", true)) {
             String url = getConfig().getString("resource-pack.url", "").trim();
-            if (!url.isEmpty()) {
-                String sha1 = getConfig().getString("resource-pack.sha1", "").trim();
-                if (sha1.isEmpty()) player.setResourcePack(url);
-                else player.setResourcePack(url, sha1);
+            String sha1 = getConfig().getString("resource-pack.sha1", "").trim();
+            if (url.isEmpty() || !sha1.matches("(?i)[0-9a-f]{40}")) {
+                getLogger().severe("Required resource pack URL or SHA-1 is missing/invalid. Configure resource-pack.url and resource-pack.sha1.");
+                player.kick(Component.text("This server requires its SMP Essentials resource pack, but it is not configured correctly. Contact an administrator."));
+                return;
             }
+            player.setResourcePack(url, sha1.toLowerCase(), true,
+                    Component.text("This server requires the SMP Essentials pack for its custom Discord banner."));
         }
         if (!hiddenPlayers.contains(player.getUniqueId())
                 && getConfig().getBoolean("bossbar.enabled", true)) {
