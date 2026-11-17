@@ -1,0 +1,9 @@
+bossbar:
+  enabled: true
+
+# Optional: host the generated resource-pack ZIP on a direct HTTPS download URL.
+# If auto-send is true, the plugin asks players to install it when they join.
+resource-pack:
+  auto-send: false
+  url: ""
+  sha1: ""
