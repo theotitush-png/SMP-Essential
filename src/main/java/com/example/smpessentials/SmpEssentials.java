@@ -55,7 +55,7 @@ public final class SmpEssentials extends JavaPlugin implements Listener {
             String sha1 = getConfig().getString("resource-pack.sha1", "").trim();
             if (url.isEmpty() || !sha1.matches("(?i)[0-9a-f]{40}")) {
                 getLogger().severe("Required resource pack URL or SHA-1 is missing/invalid. Configure resource-pack.url and resource-pack.sha1.");
-                player.kick(Component.text("This server requires its SMP Essentials resource pack, but it is not configured correctly. Contact an administrator."));
+                player.sendMessage(Component.text("§cThe server resource pack is not configured yet. Please contact an administrator."));
                 return;
             }
             player.setResourcePack(url, sha1.toLowerCase(), true,
