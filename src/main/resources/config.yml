@@ -1,9 +1,9 @@
 bossbar:
   enabled: true
 
-# Optional: host the generated resource-pack ZIP on a direct HTTPS download URL.
-# If auto-send is true, the plugin asks players to install it when they join.
+# Host the resource-pack ZIP at a direct HTTPS download URL.
+# sha1 must be the 40-character SHA-1 hash of that exact ZIP.
 resource-pack:
-  auto-send: false
+  auto-send: true
   url: ""
   sha1: ""
