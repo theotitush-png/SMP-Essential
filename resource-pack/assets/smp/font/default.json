@@ -3,9 +3,11 @@
     {
       "type": "bitmap",
       "file": "smp:font/discord_banner.png",
-      "ascent": 30,
-      "height": 38,
-      "chars": ["\uE001"]
+      "ascent": 17,
+      "height": 18,
+      "chars": [
+        ""
+      ]
     }
   ]
 }

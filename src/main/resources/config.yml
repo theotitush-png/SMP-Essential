@@ -1,9 +1,6 @@
 bossbar:
   enabled: true
 
-# Host the resource-pack ZIP at a direct HTTPS download URL.
-# sha1 must be the 40-character SHA-1 hash of that exact ZIP.
-resource-pack:
-  auto-send: true
-  url: ""
-  sha1: ""
+# Resource-pack delivery is disabled.
+# Each player must install SMP-Essentials-Resource-Pack.zip in their
+# Minecraft resourcepacks folder and enable it in Options > Resource Packs.

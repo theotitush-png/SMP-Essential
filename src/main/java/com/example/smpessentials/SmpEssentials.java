@@ -27,7 +27,7 @@ public final class SmpEssentials extends JavaPlugin implements Listener {
         createBar();
         Bukkit.getPluginManager().registerEvents(this, this);
         for (Player player : Bukkit.getOnlinePlayers()) showTo(player);
-        getLogger().info("SMP Essentials enabled.");
+        getLogger().info("SMP Essentials enabled. Players should enable the SMP Essentials pack in their client resource-pack settings.");
     }
 
     @Override
@@ -50,17 +50,6 @@ public final class SmpEssentials extends JavaPlugin implements Listener {
     }
 
     private void showTo(Player player) {
-        if (getConfig().getBoolean("resource-pack.auto-send", true)) {
-            String url = getConfig().getString("resource-pack.url", "").trim();
-            String sha1 = getConfig().getString("resource-pack.sha1", "").trim();
-            if (url.isEmpty() || !sha1.matches("(?i)[0-9a-f]{40}")) {
-                getLogger().severe("Required resource pack URL or SHA-1 is missing/invalid. Configure resource-pack.url and resource-pack.sha1.");
-                player.sendMessage(Component.text("§cThe server resource pack is not configured yet. Please contact an administrator."));
-                return;
-            }
-            player.setResourcePack(url, sha1.toLowerCase(), true,
-                    Component.text("This server requires the SMP Essentials pack for its custom Discord banner."));
-        }
         if (!hiddenPlayers.contains(player.getUniqueId())
                 && getConfig().getBoolean("bossbar.enabled", true)) {
             player.showBossBar(discordBar);
@@ -103,10 +92,8 @@ public final class SmpEssentials extends JavaPlugin implements Listener {
             reloadConfig();
             createBar();
             for (Player player : Bukkit.getOnlinePlayers()) {
-                if (!hiddenPlayers.contains(player.getUniqueId())
-                        && getConfig().getBoolean("bossbar.enabled", true)) {
-                    player.showBossBar(discordBar);
-                }
+                player.hideBossBar(discordBar);
+                showTo(player);
             }
             sender.sendMessage("§aSMP Essentials reloaded.");
             return true;
