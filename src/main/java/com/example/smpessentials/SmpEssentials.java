@@ -19,7 +19,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public final class SmpEssentials extends JavaPlugin implements Listener {
-    private static final String GLYPH = "\\uE001";
+    private static final String GLYPH = "\uE001";
     private final Set<UUID> hiddenPlayers = new HashSet<>();
     private BossBar discordBar;
 
